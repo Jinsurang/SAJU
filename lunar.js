@@ -35,7 +35,7 @@ var LEAP_MONTH = [
 ];
 
 function lunarToSolar(ly, lm, ld, isLeap) {
-    var baseDate = new Date(1900, 0, 31); // 1900-01-31 = 음력 1900-01-01
+    var baseDate = new Date(1900, 0, 31);
     var days = 0;
     
     for (var y = 1900; y < ly; y++) {

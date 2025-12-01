@@ -196,7 +196,7 @@
         function submitForm(event) {
             event.preventDefault();
             
-            var name = document.getElementById('nameInput').value;
+            var name = document.getElementById('nameInput').value.trim();
             var year = parseInt(document.getElementById('yearInput').value);
             var month = parseInt(document.getElementById('monthInput').value);
             var day = parseInt(document.getElementById('dayInput').value);
@@ -205,8 +205,8 @@
             var timeValue = document.getElementById('timeInput').value;
             var unknownTime = document.getElementById('unknownTime').checked;
             
-            if (!gender) {
-                alert('Please select your sex at birth');
+            if (!name || !gender || !year || !month || !day) {
+                alert('Please fill all required fields');
                 return false;
             }
             

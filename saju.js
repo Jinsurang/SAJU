@@ -45,16 +45,16 @@ var TEN_GODS = {
 
 // 십이운성 (12 Life Stages)
 var TWELVE_STAGES = [
-    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'], // 甲
-    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'], // 乙
-    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'], // 丙
-    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'], // 丁
-    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'], // 戊
-    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'], // 己
-    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'], // 庚
-    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'], // 辛
-    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'], // 壬
-    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴']  // 癸
+    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'],
+    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'],
+    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'],
+    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'],
+    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'],
+    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'],
+    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'],
+    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴'],
+    ['長生','沐浴','冠帶','建祿','帝旺','衰','病','死','墓','絶','胎','養'],
+    ['長生','養','胎','絶','墓','死','病','衰','帝旺','建祿','冠帶','沐浴']
 ];
 
 var STAGE_NAMES = {
@@ -72,7 +72,6 @@ var STAGE_NAMES = {
     '養':{en:'Nourishment',ko:'養'}
 };
 
-// 년주 계산
 function getYearPillar(year) {
     var offset = (year - 4) % 60;
     return {
@@ -81,7 +80,6 @@ function getYearPillar(year) {
     };
 }
 
-// 월주 계산
 function getMonthPillar(year, month) {
     var yearH = ((year - 4) % 60) % 10;
     var monthOffset = (yearH * 12 + month + 1) % 60;
@@ -91,19 +89,17 @@ function getMonthPillar(year, month) {
     };
 }
 
-// 일주 계산
 function getDayPillar(year, month, day) {
     var baseDate = new Date(1900, 0, 1);
     var targetDate = new Date(year, month - 1, day);
     var daysDiff = Math.floor((targetDate - baseDate) / 86400000);
-    var offset = (daysDiff + 11) % 60; // 1900-01-01 = 乙亥 (index 11)
+    var offset = (daysDiff + 11) % 60;
     return {
         heavenly: HEAVENLY[offset % 10],
         earthly: EARTHLY[offset % 12]
     };
 }
 
-// 시주 계산
 function getHourPillar(dayPillar, hour, minute) {
     var dayH = 0;
     for (var i = 0; i < HEAVENLY.length; i++) {
@@ -122,7 +118,6 @@ function getHourPillar(dayPillar, hour, minute) {
     };
 }
 
-// 십성 계산
 function getTenGod(dayStem, stem) {
     if (!stem) return null;
     
@@ -144,7 +139,6 @@ function getTenGod(dayStem, stem) {
     return null;
 }
 
-// 십이운성 계산
 function getTwelveStage(dayStem, branch) {
     var stemIdx = 0, branchIdx = 0;
     for (var i = 0; i < HEAVENLY.length; i++) {
@@ -158,7 +152,6 @@ function getTwelveStage(dayStem, branch) {
     return STAGE_NAMES[stageName];
 }
 
-// 대운 계산
 function getDaeun(year, month, gender, birthYear) {
     var yearPillar = getYearPillar(birthYear);
     var isYangYear = !yearPillar.heavenly.yin;
@@ -183,7 +176,6 @@ function getDaeun(year, month, gender, birthYear) {
     return daeun;
 }
 
-// 세운 계산
 function getSeun(birthYear) {
     var currentYear = new Date().getFullYear();
     var seun = [];
@@ -201,7 +193,6 @@ function getSeun(birthYear) {
     return seun;
 }
 
-// 월운 계산
 function getWolun(year) {
     var currentYear = new Date().getFullYear();
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -220,7 +211,6 @@ function getWolun(year) {
     return wolun;
 }
 
-// 오행 카운트
 function countElements(saju) {
     var count = {Wood:0, Fire:0, Earth:0, Metal:0, Water:0};
     
@@ -244,13 +234,11 @@ function countElements(saju) {
     return count;
 }
 
-// 메인 계산 함수
 function calculateSaju(data) {
     var y = data.year;
     var m = data.month;
     var d = data.day;
     
-    // 음력 변환
     if (data.calendarType === 'lunar') {
         var solar = lunarToSolar(y, m, d, false);
         y = solar.year;
@@ -263,18 +251,15 @@ function calculateSaju(data) {
     var day = getDayPillar(y, m, d);
     var hour = data.isUnknownTime ? null : getHourPillar(day, data.hour, data.minute);
     
-    // 십이운성 추가
     year.stage = getTwelveStage(day.heavenly, year.earthly);
     month.stage = getTwelveStage(day.heavenly, month.earthly);
     day.stage = getTwelveStage(day.heavenly, day.earthly);
     if (hour) hour.stage = getTwelveStage(day.heavenly, hour.earthly);
     
-    // 대운, 세운, 월운
     var daeun = getDaeun(m, m, data.gender, y);
     var seun = getSeun(y);
     var wolun = getWolun(y);
     
-    // 대운, 세운, 월운에 십이운성 추가
     for (var i = 0; i < daeun.length; i++) {
         daeun[i].stage = getTwelveStage(day.heavenly, daeun[i].earthly);
     }
@@ -285,7 +270,6 @@ function calculateSaju(data) {
         wolun[i].stage = getTwelveStage(day.heavenly, wolun[i].earthly);
     }
     
-    // 일주 동물 이름
     var color = day.heavenly.element === 'Wood' ? 'Green' :
                 day.heavenly.element === 'Fire' ? 'Red' :
                 day.heavenly.element === 'Earth' ? 'Yellow' :
