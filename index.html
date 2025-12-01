@@ -3,60 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saju - Four Pillars Reading</title>
+    <title>Saju Manseok - Four Pillars Reading</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>四柱八字</h1>
-            <p class="subtitle">Saju - Korean Four Pillars Fortune Reading</p>
+            <h1>Saju Manseok</h1>
+            <button class="menu-btn" aria-label="Menu">☰</button>
         </header>
 
         <!-- Input Form -->
         <div class="form-container" id="formContainer">
             <form id="sajuForm" onsubmit="return submitForm(event)">
+                <!-- Name -->
                 <div class="input-group">
-                    <label>Name</label>
-                    <input type="text" id="nameInput" placeholder="Your name" required>
+                    <label for="nameInput">Name</label>
+                    <input type="text" id="nameInput" placeholder="Enter up to 12 characters" maxlength="12" pattern="[A-Za-z가-힣\s]+" oninput="this.value = this.value.replace(/[0-9]/g, '')" required>
                 </div>
 
-                <div class="input-group">
-                    <label>Birth Date</label>
-                    <div class="date-inputs">
-                        <input type="number" id="yearInput" placeholder="1990" min="1900" max="2100" required>
-                        <input type="number" id="monthInput" placeholder="1" min="1" max="12" required>
-                        <input type="number" id="dayInput" placeholder="15" min="1" max="31" required>
-                    </div>
-                </div>
-
+                <!-- Gender -->
                 <div class="input-group">
                     <label>Sex at Birth</label>
-                    <div class="btn-group">
-                        <button type="button" id="maleBtn" class="btn-option" onclick="selectGender('male')">Male</button>
-                        <button type="button" id="femaleBtn" class="btn-option" onclick="selectGender('female')">Female</button>
+                    <div class="toggle-group">
+                        <button type="button" id="femaleBtn" class="toggle-btn active" onclick="selectGender('female')">
+                            Female
+                        </button>
+                        <button type="button" id="maleBtn" class="toggle-btn" onclick="selectGender('male')">
+                            Male
+                        </button>
                     </div>
-                    <input type="hidden" id="genderInput" required>
+                    <input type="hidden" id="genderInput" value="female" required>
                 </div>
 
+                <!-- Birth Date & Time -->
                 <div class="input-group">
-                    <label>Calendar Type</label>
-                    <div class="btn-group">
-                        <button type="button" id="solarBtn" class="btn-option active" onclick="selectCalendar('solar')">☀️ Solar</button>
-                        <button type="button" id="lunarBtn" class="btn-option" onclick="selectCalendar('lunar')">🌙 Lunar</button>
+                    <label>Birth Date & Time</label>
+                    <div class="date-time-row">
+                        <select id="calendarInput" class="calendar-select" onchange="selectCalendar(this.value)">
+                            <option value="solar">Solar</option>
+                            <option value="lunar">Lunar</option>
+                        </select>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <input type="text" id="dateInput" class="date-input" placeholder="YYYY/MM/DD" maxlength="10" required>
+                            <span id="dateError" class="error-message" style="display: none;"></span>
+                        </div>
+                        <input type="time" id="timeInput" class="time-input">
                     </div>
-                    <input type="hidden" id="calendarInput" value="solar">
+                    <div class="time-options">
+                        <label class="radio-label">
+                            <input type="radio" name="timeOption" id="unknownTime" value="unknown" onchange="toggleTime()">
+                            <span>Unknown Time</span>
+                        </label>
+                    </div>
+                    <div class="time-table-link">
+                        <a href="#" onclick="showTimeTable(); return false;">12 Zodiac Time Table</a>
+                        <span class="info-icon">🔍</span>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label>Birth Time (Optional)</label>
-                    <input type="time" id="timeInput">
-                    <label style="font-size:14px;margin-top:8px;">
-                        <input type="checkbox" id="unknownTime" onchange="toggleTime()"> I don't know my birth time
-                    </label>
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button type="submit" class="primary-btn">View Manseok</button>
+                    <button type="button" class="secondary-btn" onclick="loadSaved()">Load Saved Manseok</button>
                 </div>
-
-                <button type="submit" class="submit-btn">Calculate Saju</button>
             </form>
         </div>
 
@@ -67,86 +77,33 @@
                 <p id="resultInfo"></p>
             </div>
 
-            <div class="pillars-container">
-                <div class="pillar">
-                    <div class="pillar-label">Hour 時柱</div>
-                    <div class="ten-god" id="hourGod"></div>
-                    <div class="pillar-char" id="hourH"></div>
-                    <div class="pillar-char" id="hourE"></div>
-                    <div class="pillar-stage" id="hourStage"></div>
-                </div>
-                <div class="pillar">
-                    <div class="pillar-label">Day 日柱</div>
-                    <div class="ten-god" id="dayGod">Self</div>
-                    <div class="pillar-char" id="dayH"></div>
-                    <div class="pillar-char" id="dayE"></div>
-                    <div class="pillar-stage" id="dayStage"></div>
-                </div>
-                <div class="pillar">
-                    <div class="pillar-label">Month 月柱</div>
-                    <div class="ten-god" id="monthGod"></div>
-                    <div class="pillar-char" id="monthH"></div>
-                    <div class="pillar-char" id="monthE"></div>
-                    <div class="pillar-stage" id="monthStage"></div>
-                </div>
-                <div class="pillar">
-                    <div class="pillar-label">Year 年柱</div>
-                    <div class="ten-god" id="yearGod"></div>
-                    <div class="pillar-char" id="yearH"></div>
-                    <div class="pillar-char" id="yearE"></div>
-                    <div class="pillar-stage" id="yearStage"></div>
-                </div>
+            <div class="pillars-section">
+                <h3>Four Pillars of Destiny 四柱</h3>
+                <div class="fortune-grid vertical" id="pillarsGrid"></div>
             </div>
 
             <div class="elements-section">
                 <h3>Five Elements Balance 五行</h3>
-                <div class="elements-grid">
-                    <div class="element-item">
-                        <div class="element-icon Wood">木</div>
-                        <div>Wood</div>
-                        <div id="woodCount">0</div>
-                        <div id="woodPercent">0%</div>
-                    </div>
-                    <div class="element-item">
-                        <div class="element-icon Fire">火</div>
-                        <div>Fire</div>
-                        <div id="fireCount">0</div>
-                        <div id="firePercent">0%</div>
-                    </div>
-                    <div class="element-item">
-                        <div class="element-icon Earth">土</div>
-                        <div>Earth</div>
-                        <div id="earthCount">0</div>
-                        <div id="earthPercent">0%</div>
-                    </div>
-                    <div class="element-item">
-                        <div class="element-icon Metal">金</div>
-                        <div>Metal</div>
-                        <div id="metalCount">0</div>
-                        <div id="metalPercent">0%</div>
-                    </div>
-                    <div class="element-item">
-                        <div class="element-icon Water">水</div>
-                        <div>Water</div>
-                        <div id="waterCount">0</div>
-                        <div id="waterPercent">0%</div>
-                    </div>
-                </div>
+                <div class="fortune-grid vertical" id="elementsGrid"></div>
             </div>
 
             <div class="fortune-section">
-                <h3>Major Life Cycles 大運</h3>
-                <div class="fortune-grid" id="daeunGrid"></div>
+                <div class="fortune-header">
+                    <h3>Major Life Cycles <span id="daeunTitle"></span></h3>
+                    <span class="info-icon" onclick="showDaeunInfo()">🔍</span>
+                </div>
+                <p class="slide-hint">Slide left/right to see more</p>
+                <div class="fortune-grid vertical" id="daeunGrid"></div>
             </div>
 
             <div class="fortune-section">
                 <h3>Annual Fortunes 歲運</h3>
-                <div class="fortune-grid" id="seunGrid"></div>
+                <div class="fortune-grid vertical" id="seunGrid"></div>
             </div>
 
             <div class="fortune-section">
                 <h3>Monthly Fortunes 月運</h3>
-                <div class="fortune-grid" id="wolunGrid"></div>
+                <div class="fortune-grid vertical" id="wolunGrid"></div>
             </div>
 
             <button class="back-btn" onclick="goBack()">Calculate Another</button>
@@ -156,6 +113,102 @@
     <script src="lunar.js"></script>
     <script src="saju.js"></script>
     <script>
+        // Format date input (YYYY/MM/DD) with validation
+        var dateInput = document.getElementById('dateInput');
+        var dateError = document.getElementById('dateError');
+        
+        function validateDate(year, month, day) {
+            // Check year range (reasonable range for Saju)
+            if (year < 1900 || year > 2100) {
+                return 'Year must be between 1900 and 2100';
+            }
+            
+            // Check month range
+            if (month < 1 || month > 12) {
+                return 'Month must be between 1 and 12';
+            }
+            
+            // Check day range based on month
+            var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            
+            // Check for leap year
+            if (month === 2 && ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0))) {
+                daysInMonth[1] = 29;
+            }
+            
+            if (day < 1 || day > daysInMonth[month - 1]) {
+                return 'Invalid day for this month';
+            }
+            
+            return null;
+        }
+        
+        dateInput.addEventListener('input', function(e) {
+            var value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 4) {
+                value = value.slice(0, 4) + '/' + value.slice(4);
+            }
+            if (value.length >= 7) {
+                value = value.slice(0, 7) + '/' + value.slice(7, 9);
+            }
+            e.target.value = value;
+            
+            // Validate date
+            var dateParts = value.split('/');
+            if (dateParts.length === 3 && dateParts[0].length === 4 && dateParts[1].length === 2 && dateParts[2].length === 2) {
+                var year = parseInt(dateParts[0]);
+                var month = parseInt(dateParts[1]);
+                var day = parseInt(dateParts[2]);
+                
+                var error = validateDate(year, month, day);
+                if (error) {
+                    dateInput.style.borderColor = '#ef4444';
+                    dateInput.classList.add('error');
+                    if (dateError) {
+                        dateError.textContent = error;
+                        dateError.style.display = 'block';
+                    }
+                } else {
+                    dateInput.style.borderColor = '#d2d2d7';
+                    dateInput.classList.remove('error');
+                    if (dateError) {
+                        dateError.textContent = '';
+                        dateError.style.display = 'none';
+                    }
+                }
+            } else if (value.length > 0) {
+                dateInput.style.borderColor = '#d2d2d7';
+                dateInput.classList.remove('error');
+                if (dateError) {
+                    dateError.textContent = '';
+                    dateError.style.display = 'none';
+                }
+            }
+        });
+        
+        dateInput.addEventListener('blur', function(e) {
+            var value = e.target.value.trim();
+            var dateParts = value.split('/');
+            if (dateParts.length === 3 && dateParts[0].length === 4 && dateParts[1].length === 2 && dateParts[2].length === 2) {
+                var year = parseInt(dateParts[0]);
+                var month = parseInt(dateParts[1]);
+                var day = parseInt(dateParts[2]);
+                
+                var error = validateDate(year, month, day);
+                if (error) {
+                    dateInput.style.borderColor = '#ef4444';
+                    dateInput.classList.add('error');
+                    if (dateError) {
+                        dateError.textContent = error;
+                        dateError.style.display = 'block';
+                    }
+                } else {
+                    dateInput.style.borderColor = '#d2d2d7';
+                    dateInput.classList.remove('error');
+                }
+            }
+        });
+
         // Gender Selection
         function selectGender(gender) {
             document.getElementById('genderInput').value = gender;
@@ -171,20 +224,13 @@
         // Calendar Selection
         function selectCalendar(type) {
             document.getElementById('calendarInput').value = type;
-            document.getElementById('solarBtn').classList.remove('active');
-            document.getElementById('lunarBtn').classList.remove('active');
-            if (type === 'solar') {
-                document.getElementById('solarBtn').classList.add('active');
-            } else {
-                document.getElementById('lunarBtn').classList.add('active');
-            }
         }
 
         // Toggle Time Input
         function toggleTime() {
-            var checkbox = document.getElementById('unknownTime');
             var timeInput = document.getElementById('timeInput');
-            if (checkbox.checked) {
+            var unknownRadio = document.getElementById('unknownTime');
+            if (unknownRadio.checked) {
                 timeInput.disabled = true;
                 timeInput.value = '';
             } else {
@@ -192,21 +238,52 @@
             }
         }
 
+        function showTimeTable() {
+            alert('12 Zodiac Time Table:\n\n23:00-01:00 (子) Rat\n01:00-03:00 (丑) Ox\n03:00-05:00 (寅) Tiger\n05:00-07:00 (卯) Rabbit\n07:00-09:00 (辰) Dragon\n09:00-11:00 (巳) Snake\n11:00-13:00 (午) Horse\n13:00-15:00 (未) Sheep\n15:00-17:00 (申) Monkey\n17:00-19:00 (酉) Rooster\n19:00-21:00 (戌) Dog\n21:00-23:00 (亥) Pig');
+        }
+
+        function loadSaved() {
+            alert('Load saved Manseok feature coming soon!');
+        }
+
         // Form Submission
         function submitForm(event) {
             event.preventDefault();
             
             var name = document.getElementById('nameInput').value.trim();
-            var year = parseInt(document.getElementById('yearInput').value);
-            var month = parseInt(document.getElementById('monthInput').value);
-            var day = parseInt(document.getElementById('dayInput').value);
+            var dateValue = document.getElementById('dateInput').value.trim();
             var gender = document.getElementById('genderInput').value;
             var calendar = document.getElementById('calendarInput').value;
             var timeValue = document.getElementById('timeInput').value;
             var unknownTime = document.getElementById('unknownTime').checked;
             
+            // Parse date (YYYY/MM/DD)
+            var dateParts = dateValue.split('/');
+            if (dateParts.length !== 3) {
+                alert('Please enter date in YYYY/MM/DD format');
+                return false;
+            }
+            
+            var year = parseInt(dateParts[0]);
+            var month = parseInt(dateParts[1]);
+            var day = parseInt(dateParts[2]);
+            
             if (!name || !gender || !year || !month || !day) {
                 alert('Please fill all required fields');
+                return false;
+            }
+            
+            // Validate date
+            var dateErrorMsg = validateDate(year, month, day);
+            if (dateErrorMsg) {
+                var dateInputEl = document.getElementById('dateInput');
+                dateInputEl.style.borderColor = '#ef4444';
+                dateInputEl.classList.add('error');
+                var errorEl = document.getElementById('dateError');
+                if (errorEl) {
+                    errorEl.textContent = dateErrorMsg;
+                    errorEl.style.display = 'block';
+                }
                 return false;
             }
             
@@ -244,29 +321,19 @@
 
         // Display Results
         function showResults(name, birthData, saju, elements) {
+            // Store saju for later use
+            window.lastSaju = saju;
+            
+            var genderText = birthData.gender === 'male' ? 'Male' : 'Female';
             document.getElementById('resultName').textContent = name + ' (' + saju.dayAnimal + ')';
             document.getElementById('resultInfo').textContent = 
-                birthData.year + '.' + birthData.month + '.' + birthData.day;
+                birthData.year + '.' + birthData.month + '.' + birthData.day + ' • ' + genderText;
             
             // Display Pillars
-            setPillar('year', saju.year, saju.tenGods.year);
-            setPillar('month', saju.month, saju.tenGods.month);
-            setPillar('day', saju.day, null);
-            setPillar('hour', saju.hour, saju.tenGods.hour);
+            setPillars(saju);
             
             // Display Elements
-            var total = elements.Wood + elements.Fire + elements.Earth + elements.Metal + elements.Water;
-            document.getElementById('woodCount').textContent = elements.Wood;
-            document.getElementById('fireCount').textContent = elements.Fire;
-            document.getElementById('earthCount').textContent = elements.Earth;
-            document.getElementById('metalCount').textContent = elements.Metal;
-            document.getElementById('waterCount').textContent = elements.Water;
-            
-            document.getElementById('woodPercent').textContent = total > 0 ? (elements.Wood/total*100).toFixed(1) + '%' : '0%';
-            document.getElementById('firePercent').textContent = total > 0 ? (elements.Fire/total*100).toFixed(1) + '%' : '0%';
-            document.getElementById('earthPercent').textContent = total > 0 ? (elements.Earth/total*100).toFixed(1) + '%' : '0%';
-            document.getElementById('metalPercent').textContent = total > 0 ? (elements.Metal/total*100).toFixed(1) + '%' : '0%';
-            document.getElementById('waterPercent').textContent = total > 0 ? (elements.Water/total*100).toFixed(1) + '%' : '0%';
+            setElements(elements);
             
             // Display Fortunes
             setDaeun(saju.daeun, saju.day.heavenly);
@@ -279,36 +346,96 @@
             window.scrollTo(0, 0);
         }
 
-        // Set Pillar
-        function setPillar(pos, pillar, tenGod) {
-            var hEl = document.getElementById(pos + 'H');
-            var eEl = document.getElementById(pos + 'E');
-            var godEl = document.getElementById(pos + 'God');
-            var stageEl = document.getElementById(pos + 'Stage');
+        // Set Pillars
+        function setPillars(saju) {
+            var grid = document.getElementById('pillarsGrid');
+            grid.innerHTML = '';
             
-            if (!pillar) {
-                hEl.textContent = '?';
-                eEl.textContent = '?';
-                hEl.className = 'pillar-char';
-                eEl.className = 'pillar-char';
-                hEl.style.background = '#ccc';
-                eEl.style.background = '#ccc';
-                godEl.textContent = '';
-                stageEl.textContent = 'Unknown';
-                return;
+            var pillars = [
+                { label: 'Hour 時柱', pillar: saju.hour, tenGod: saju.tenGods.hour },
+                { label: 'Day 日柱', pillar: saju.day, tenGod: null },
+                { label: 'Month 月柱', pillar: saju.month, tenGod: saju.tenGods.month },
+                { label: 'Year 年柱', pillar: saju.year, tenGod: saju.tenGods.year }
+            ];
+            
+            for (var i = 0; i < pillars.length; i++) {
+                var p = pillars[i];
+                var box = document.createElement('div');
+                box.className = 'fortune-column';
+                
+                if (!p.pillar) {
+                    box.innerHTML = 
+                        '<div class="fortune-period">' + p.label + '</div>' +
+                        '<div class="fortune-ten-god"></div>' +
+                        '<div class="fortune-pillars">' +
+                            '<div class="fortune-char-box" style="background:#ccc;">' +
+                                '<span class="char-large">?</span>' +
+                            '</div>' +
+                            '<div class="fortune-char-box" style="background:#ccc;">' +
+                                '<span class="char-large">?</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="fortune-stage">Unknown</div>';
+                } else {
+                    var tenGodText = p.tenGod ? p.tenGod.ko : (p.label === 'Day 日柱' ? 'Self' : '');
+                    var stageText = '';
+                    if (p.pillar.stage) {
+                        if (p.tenGod && p.label !== 'Day 日柱') {
+                            stageText = p.tenGod.ko + ' ' + p.pillar.stage.ko;
+                        } else {
+                            stageText = p.pillar.stage.ko;
+                        }
+                    }
+                    
+                    box.innerHTML = 
+                        '<div class="fortune-period">' + p.label + '</div>' +
+                        '<div class="fortune-ten-god">' + tenGodText + '</div>' +
+                        '<div class="fortune-pillars">' +
+                            '<div class="fortune-char-box ' + p.pillar.heavenly.element + '">' +
+                                '<span class="char-large">' + p.pillar.heavenly.ko + '</span>' +
+                                '<span class="char-small">' + p.pillar.heavenly.en + '</span>' +
+                            '</div>' +
+                            '<div class="fortune-char-box ' + p.pillar.earthly.element + '">' +
+                                '<span class="char-large">' + p.pillar.earthly.ko + '</span>' +
+                                '<span class="char-small">' + p.pillar.earthly.en + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="fortune-stage">' + stageText + '</div>';
+                }
+                grid.appendChild(box);
             }
+        }
+        
+        // Set Elements
+        function setElements(elements) {
+            var grid = document.getElementById('elementsGrid');
+            grid.innerHTML = '';
             
-            hEl.textContent = pillar.heavenly.ko;
-            eEl.textContent = pillar.earthly.ko;
-            hEl.className = 'pillar-char ' + pillar.heavenly.element;
-            eEl.className = 'pillar-char ' + pillar.earthly.element;
+            var total = elements.Wood + elements.Fire + elements.Earth + elements.Metal + elements.Water;
+            var elementData = [
+                { name: 'Wood', ko: '木', element: 'Wood', count: elements.Wood },
+                { name: 'Fire', ko: '火', element: 'Fire', count: elements.Fire },
+                { name: 'Earth', ko: '土', element: 'Earth', count: elements.Earth },
+                { name: 'Metal', ko: '金', element: 'Metal', count: elements.Metal },
+                { name: 'Water', ko: '水', element: 'Water', count: elements.Water }
+            ];
             
-            if (tenGod) {
-                godEl.textContent = tenGod.en;
-            }
-            
-            if (pillar.stage) {
-                stageEl.textContent = pillar.stage.en;
+            for (var i = 0; i < elementData.length; i++) {
+                var e = elementData[i];
+                var percent = total > 0 ? (e.count/total*100).toFixed(1) + '%' : '0%';
+                var box = document.createElement('div');
+                box.className = 'fortune-column';
+                
+                box.innerHTML = 
+                    '<div class="fortune-period">' + e.name + '</div>' +
+                    '<div class="fortune-pillars">' +
+                        '<div class="fortune-char-box ' + e.element + '">' +
+                            '<span class="char-large">' + e.ko + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="element-count">' + e.count + '</div>' +
+                    '<div class="fortune-stage">' + percent + '</div>';
+                grid.appendChild(box);
             }
         }
 
@@ -316,18 +443,69 @@
         function setDaeun(daeun, dayStem) {
             var grid = document.getElementById('daeunGrid');
             grid.innerHTML = '';
-            for (var i = 0; i < daeun.length; i++) {
-                var d = daeun[i];
-                var box = document.createElement('div');
-                box.className = 'fortune-box';
-                box.innerHTML = 
-                    '<div><strong>' + d.age + '</strong></div>' +
-                    '<div style="font-size:10px;color:#667eea;">' + d.startAge + '-' + (d.startAge+9) + '</div>' +
-                    '<div class="pillar-char ' + d.heavenly.element + '" style="font-size:24px;margin:8px 0;">' + d.heavenly.ko + '</div>' +
-                    '<div class="pillar-char ' + d.earthly.element + '" style="font-size:24px;margin:8px 0;">' + d.earthly.ko + '</div>' +
-                    '<div style="font-size:10px;color:#888;">' + d.stage.en + '</div>';
-                grid.appendChild(box);
+            
+            // Limit to 10 cycles
+            var displayCount = Math.min(daeun.length, 10);
+            
+            // Get first start age to calculate age sequence
+            if (displayCount > 0) {
+                var firstStartAge = daeun[0].startAge;
+                var firstCycle = daeun[0];
+                var titleText = 'Cycle ' + firstStartAge + ' (' + firstCycle.heavenly.ko + firstCycle.earthly.ko + ')';
+                document.getElementById('daeunTitle').textContent = titleText;
+                
+                // Display in reverse order (oldest to youngest, right to left)
+                // Show ages: firstStartAge, firstStartAge+10, firstStartAge+20, ..., firstStartAge+90
+                for (var i = displayCount - 1; i >= 0; i--) {
+                    var d = daeun[i];
+                    var tenGod = getTenGod(dayStem, d.heavenly);
+                    var box = document.createElement('div');
+                    box.className = 'fortune-column';
+                    
+                    // Calculate age: firstStartAge + (i * 10)
+                    var displayAge = firstStartAge + (i * 10);
+                    
+                    var tenGodText = tenGod ? tenGod.ko : '';
+                    var stageText = d.stage ? (tenGodText + ' ' + d.stage.ko) : '';
+                    
+                    box.innerHTML = 
+                        '<div class="fortune-period">' + displayAge + '</div>' +
+                        '<div class="fortune-ten-god">' + tenGodText + '</div>' +
+                        '<div class="fortune-pillars">' +
+                            '<div class="fortune-char-box ' + d.heavenly.element + '">' +
+                                '<span class="char-large">' + d.heavenly.ko + '</span>' +
+                                '<span class="char-small">' + d.heavenly.en + '</span>' +
+                            '</div>' +
+                            '<div class="fortune-char-box ' + d.earthly.element + '">' +
+                                '<span class="char-large">' + d.earthly.ko + '</span>' +
+                                '<span class="char-small">' + d.earthly.en + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="fortune-stage">' + stageText + '</div>';
+                    grid.appendChild(box);
+                }
             }
+        }
+        
+        function getTenGod(dayStem, stem) {
+            if (!stem) return null;
+            var dayIdx = 0, stemIdx = 0;
+            for (var i = 0; i < HEAVENLY.length; i++) {
+                if (HEAVENLY[i].ko === dayStem.ko) dayIdx = i;
+                if (HEAVENLY[i].ko === stem.ko) stemIdx = i;
+            }
+            var diff = (stemIdx - dayIdx + 10) % 10;
+            var sameYin = dayStem.yin === stem.yin;
+            if (diff === 0) return sameYin ? TEN_GODS.same_yin : TEN_GODS.same_yang;
+            if (diff === 2) return sameYin ? TEN_GODS.generate_yang : TEN_GODS.generate_yin;
+            if (diff === 4) return sameYin ? TEN_GODS.controlled_yang : TEN_GODS.controlled_yin;
+            if (diff === 6) return sameYin ? TEN_GODS.controls_yang : TEN_GODS.controls_yin;
+            if (diff === 8) return sameYin ? TEN_GODS.generates_yang : TEN_GODS.generates_yin;
+            return null;
+        }
+        
+        function showDaeunInfo() {
+            alert('Major Life Cycles show 10-year periods starting from age 7. Each cycle represents a decade of your life fortune.');
         }
 
         // Set Seun
@@ -335,15 +513,39 @@
             var grid = document.getElementById('seunGrid');
             grid.innerHTML = '';
             var currentYear = new Date().getFullYear();
-            for (var i = 0; i < seun.length; i++) {
+            var dayStem = null;
+            // Get day stem from saju object
+            try {
+                var sajuData = window.lastSaju;
+                if (sajuData && sajuData.day) {
+                    dayStem = sajuData.day.heavenly;
+                }
+            } catch(e) {}
+            
+            // Display in reverse order (oldest to newest, right to left)
+            for (var i = seun.length - 1; i >= 0; i--) {
                 var s = seun[i];
+                var tenGod = dayStem ? getTenGod(dayStem, s.heavenly) : null;
                 var box = document.createElement('div');
-                box.className = s.year === currentYear ? 'fortune-box current' : 'fortune-box';
+                box.className = s.year === currentYear ? 'fortune-column current' : 'fortune-column';
+                
+                var tenGodText = tenGod ? tenGod.ko : '';
+                var stageText = s.stage ? (tenGodText + ' ' + s.stage.ko) : '';
+                
                 box.innerHTML = 
-                    '<div><strong>' + s.year + '</strong></div>' +
-                    '<div class="pillar-char ' + s.heavenly.element + '" style="font-size:24px;margin:8px 0;">' + s.heavenly.ko + '</div>' +
-                    '<div class="pillar-char ' + s.earthly.element + '" style="font-size:24px;margin:8px 0;">' + s.earthly.ko + '</div>' +
-                    '<div style="font-size:10px;color:#888;">' + s.stage.en + '</div>';
+                    '<div class="fortune-period">' + s.year + '</div>' +
+                    '<div class="fortune-ten-god">' + tenGodText + '</div>' +
+                    '<div class="fortune-pillars">' +
+                        '<div class="fortune-char-box ' + s.heavenly.element + '">' +
+                            '<span class="char-large">' + s.heavenly.ko + '</span>' +
+                            '<span class="char-small">' + s.heavenly.en + '</span>' +
+                        '</div>' +
+                        '<div class="fortune-char-box ' + s.earthly.element + '">' +
+                            '<span class="char-large">' + s.earthly.ko + '</span>' +
+                            '<span class="char-small">' + s.earthly.en + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="fortune-stage">' + stageText + '</div>';
                 grid.appendChild(box);
             }
         }
@@ -353,15 +555,39 @@
             var grid = document.getElementById('wolunGrid');
             grid.innerHTML = '';
             var currentMonth = new Date().getMonth() + 1;
-            for (var i = 0; i < wolun.length; i++) {
+            var dayStem = null;
+            // Get day stem from saju object
+            try {
+                var sajuData = window.lastSaju;
+                if (sajuData && sajuData.day) {
+                    dayStem = sajuData.day.heavenly;
+                }
+            } catch(e) {}
+            
+            // Display in reverse order (oldest to newest, right to left)
+            for (var i = wolun.length - 1; i >= 0; i--) {
                 var w = wolun[i];
+                var tenGod = dayStem ? getTenGod(dayStem, w.heavenly) : null;
                 var box = document.createElement('div');
-                box.className = w.month === currentMonth ? 'fortune-box current' : 'fortune-box';
+                box.className = w.month === currentMonth ? 'fortune-column current' : 'fortune-column';
+                
+                var tenGodText = tenGod ? tenGod.ko : '';
+                var stageText = w.stage ? (tenGodText + ' ' + w.stage.ko) : '';
+                
                 box.innerHTML = 
-                    '<div><strong>' + w.monthName + '</strong></div>' +
-                    '<div class="pillar-char ' + w.heavenly.element + '" style="font-size:24px;margin:8px 0;">' + w.heavenly.ko + '</div>' +
-                    '<div class="pillar-char ' + w.earthly.element + '" style="font-size:24px;margin:8px 0;">' + w.earthly.ko + '</div>' +
-                    '<div style="font-size:10px;color:#888;">' + w.stage.en + '</div>';
+                    '<div class="fortune-period">' + w.monthName + '</div>' +
+                    '<div class="fortune-ten-god">' + tenGodText + '</div>' +
+                    '<div class="fortune-pillars">' +
+                        '<div class="fortune-char-box ' + w.heavenly.element + '">' +
+                            '<span class="char-large">' + w.heavenly.ko + '</span>' +
+                            '<span class="char-small">' + w.heavenly.en + '</span>' +
+                        '</div>' +
+                        '<div class="fortune-char-box ' + w.earthly.element + '">' +
+                            '<span class="char-large">' + w.earthly.ko + '</span>' +
+                            '<span class="char-small">' + w.earthly.en + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="fortune-stage">' + stageText + '</div>';
                 grid.appendChild(box);
             }
         }

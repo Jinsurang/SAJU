@@ -1,4 +1,4 @@
-/* Toss/Apple Style - Clean & Minimal */
+/* Apple Style - Clean & Minimal */
 * {
     margin: 0;
     padding: 0;
@@ -6,215 +6,351 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
-    background: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    background: #f5f5f7;
     min-height: 100vh;
-    padding: 40px 20px;
+    padding: 0;
+    color: #1d1d1f;
 }
 
 .container {
-    max-width: 480px;
+    max-width: 600px;
     margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Header */
+/* Header - Apple Style */
 header {
-    text-align: center;
-    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 0.5px solid rgba(0,0,0,0.1);
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 header h1 {
-    font-size: 42px;
-    font-weight: 700;
-    color: #191f28;
-    margin-bottom: 8px;
-    letter-spacing: -1px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.5px;
 }
 
-header .subtitle {
-    font-size: 16px;
-    color: #4e5968;
-    font-weight: 500;
+.menu-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #1d1d1f;
+    cursor: pointer;
+    padding: 8px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
 }
 
-/* Form Container - Toss Style */
+.menu-btn:hover {
+    opacity: 1;
+}
+
+/* Form Container - Apple Style */
 .form-container {
-    background: white;
-    border-radius: 16px;
     padding: 32px 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    background: #ffffff;
 }
 
 .input-group {
-    margin-bottom: 28px;
+    margin-bottom: 32px;
 }
 
 .input-group label {
     display: block;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 15px;
     margin-bottom: 10px;
-    color: #191f28;
+    color: #1d1d1f;
+    letter-spacing: -0.2px;
 }
 
 .input-group input[type="text"],
-.input-group input[type="number"],
 .input-group input[type="time"] {
     width: 100%;
     padding: 14px 16px;
-    border: 1px solid #e5e8eb;
-    border-radius: 8px;
-    font-size: 16px;
-    color: #191f28;
-    background: #f9fafb;
-    transition: all 0.2s;
+    border: 1px solid #d2d2d7;
+    border-radius: 12px;
+    font-size: 17px;
+    color: #1d1d1f;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    font-family: inherit;
 }
 
 .input-group input:focus {
     outline: none;
-    border-color: #3182f6;
-    background: white;
+    border-color: #007aff;
+    box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
 }
 
-.date-inputs {
+.input-group input::placeholder {
+    color: #86868b;
+}
+
+.error-message {
+    display: block;
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 6px;
+    font-weight: 500;
+    min-height: 18px;
+}
+
+.input-group input.error,
+.date-input.error {
+    border-color: #ef4444;
+    background: #fff5f5;
+}
+
+/* Toggle Group - Apple Style */
+.toggle-group {
+    display: flex;
+    gap: 0;
+    background: #f5f5f7;
+    border-radius: 12px;
+    padding: 4px;
+    border: none;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #1d1d1f;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.toggle-btn.active {
+    background: #ffffff;
+    color: #007aff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Date & Time Row */
+.date-time-row {
     display: flex;
     gap: 8px;
+    margin-bottom: 12px;
 }
 
-.date-inputs input {
+.calendar-select {
+    flex: 0 0 auto;
+    padding: 14px 16px;
+    border: 1px solid #d2d2d7;
+    border-radius: 12px;
+    font-size: 17px;
+    color: #1d1d1f;
+    background: #ffffff;
+    cursor: pointer;
+    font-family: inherit;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%231d1d1f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+.calendar-select:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
+}
+
+.date-input {
     flex: 1;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.time-input {
+    flex: 0 0 100px;
     text-align: center;
 }
 
-/* Button Groups - Toss Style */
-.btn-group {
+/* Time Options */
+.time-options {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
-.btn-option {
-    flex: 1;
-    padding: 14px 16px;
-    border: 1px solid #e5e8eb;
-    background: #f9fafb;
-    border-radius: 8px;
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 15px;
-    font-weight: 600;
-    color: #4e5968;
+    color: #1d1d1f;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
-.btn-option:hover {
-    background: #f2f4f6;
-}
-
-.btn-option.active {
-    background: #3182f6;
-    color: white;
-    border-color: #3182f6;
-}
-
-/* Submit Button - Toss Blue */
-.submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: #3182f6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 17px;
-    font-weight: 700;
+.radio-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #007aff;
     cursor: pointer;
-    transition: background 0.2s;
+}
+
+.info-icon {
+    font-size: 14px;
+    opacity: 0.6;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.time-table-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #007aff;
     margin-top: 8px;
 }
 
-.submit-btn:hover {
-    background: #1b64da;
+.time-table-link a {
+    color: #007aff;
+    text-decoration: none;
 }
 
-.submit-btn:active {
-    background: #1957c2;
+.time-table-link a:hover {
+    text-decoration: underline;
+}
+
+/* Input with Icon */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon input {
+    padding-right: 44px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Action Buttons - Apple Style */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 40px;
+}
+
+.primary-btn,
+.secondary-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    letter-spacing: -0.3px;
+}
+
+.primary-btn {
+    background: #007aff;
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background: #0051d5;
+}
+
+.primary-btn:active {
+    background: #0040a8;
+    transform: scale(0.98);
+}
+
+.secondary-btn {
+    background: #f5f5f7;
+    color: #1d1d1f;
+}
+
+.secondary-btn:hover {
+    background: #e8e8ed;
+}
+
+.secondary-btn:active {
+    background: #d2d2d7;
+    transform: scale(0.98);
 }
 
 /* Result Container */
 .result-container {
-    background: white;
-    border-radius: 16px;
-    padding: 32px 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 32px 20px;
+    background: #ffffff;
+    max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .result-header {
     text-align: center;
     padding-bottom: 28px;
-    border-bottom: 1px solid #f2f4f6;
+    border-bottom: 0.5px solid rgba(0,0,0,0.1);
     margin-bottom: 28px;
 }
 
 .result-header h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #191f28;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d1d1f;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
 }
 
 .result-header p {
-    color: #6b7684;
+    color: #86868b;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
-/* Pillars - Clean Cards */
-.pillars-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 32px;
+/* Pillars Section - Unified Style */
+.pillars-section {
+    margin-bottom: 40px;
+    width: 100%;
 }
 
-.pillar {
-    background: #f9fafb;
-    border: 1px solid #e5e8eb;
-    border-radius: 12px;
-    padding: 16px 8px;
-    text-align: center;
-}
-
-.pillar-label {
-    font-size: 11px;
-    color: #8b95a1;
+.pillars-section h3 {
+    font-size: 20px;
     font-weight: 600;
-    margin-bottom: 10px;
-    text-transform: uppercase;
+    color: #1d1d1f;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
 }
 
-.ten-god {
-    font-size: 10px;
-    color: #3182f6;
-    font-weight: 700;
-    margin-bottom: 8px;
-    min-height: 14px;
-}
-
-.pillar-char {
-    font-size: 32px;
-    font-weight: 700;
-    margin: 6px 0;
-    padding: 10px 6px;
-    border-radius: 8px;
-}
-
-.pillar-stage {
-    font-size: 10px;
-    color: #8b95a1;
-    margin-top: 8px;
-    font-weight: 500;
-}
-
-/* Element Colors - Vibrant but Clean */
+/* Element Colors */
 .Wood { 
     background: #10b981;
     color: white; 
@@ -231,121 +367,224 @@ header .subtitle {
 }
 
 .Metal { 
-    background: #e5e8eb;
-    color: #191f28; 
+    background: #d2d2d7;
+    color: #1d1d1f; 
 }
 
 .Water { 
-    background: #3b82f6;
+    background: #007aff;
     color: white; 
 }
 
-/* Elements Section - Compact */
+/* Elements Section - Unified Style */
 .elements-section {
-    margin-bottom: 32px;
+    margin-bottom: 40px;
     padding-bottom: 32px;
-    border-bottom: 1px solid #f2f4f6;
+    border-bottom: 0.5px solid rgba(0,0,0,0.1);
+    width: 100%;
 }
 
 .elements-section h3 {
-    font-size: 17px;
-    font-weight: 700;
-    color: #191f28;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1f;
     margin-bottom: 16px;
     letter-spacing: -0.3px;
 }
 
-.elements-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+/* Fortune Section */
+.fortune-section {
+    margin-bottom: 40px;
+    width: 100%;
 }
 
-.element-item {
+.fortune-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.fortune-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+
+.fortune-header .info-icon {
+    font-size: 16px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.slide-hint {
+    font-size: 13px;
+    color: #86868b;
+    margin-bottom: 16px;
     text-align: center;
 }
 
-.element-icon {
-    font-size: 28px;
-    font-weight: 700;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 6px;
-}
-
-.element-item div {
-    font-size: 12px;
-    color: #4e5968;
-    margin: 3px 0;
-    font-weight: 600;
-}
-
-.element-item div:last-child {
-    font-size: 11px;
-    color: #8b95a1;
-    font-weight: 500;
-}
-
-/* Fortune Section - Clean Cards */
-.fortune-section {
-    margin-bottom: 32px;
-}
-
 .fortune-section h3 {
-    font-size: 17px;
-    font-weight: 700;
-    color: #191f28;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1f;
     margin-bottom: 16px;
     letter-spacing: -0.3px;
 }
 
 .fortune-grid {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 8px;
+    padding-left: 0;
+    padding-right: 0;
     -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.fortune-grid.vertical {
+    gap: 14px;
 }
 
 .fortune-grid::-webkit-scrollbar {
-    height: 4px;
+    height: 6px;
 }
 
 .fortune-grid::-webkit-scrollbar-track {
-    background: #f2f4f6;
+    background: #f5f5f7;
     border-radius: 4px;
 }
 
 .fortune-grid::-webkit-scrollbar-thumb {
-    background: #d1d6db;
+    background: #d2d2d7;
     border-radius: 4px;
 }
 
+.fortune-grid::-webkit-scrollbar-thumb:hover {
+    background: #86868b;
+}
+
+/* Vertical Fortune Column - Image Style */
+.fortune-column {
+    min-width: 85px;
+    width: 85px;
+    background: #ffffff;
+    border: 1px solid #e5e5e7;
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.fortune-column.current {
+    background: #e8f4ff;
+    border-color: #007aff;
+    border-width: 2px;
+}
+
+.fortune-period {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 2px;
+}
+
+.fortune-ten-god {
+    font-size: 12px;
+    color: #007aff;
+    font-weight: 500;
+    min-height: 16px;
+    margin-bottom: 4px;
+}
+
+.fortune-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 8px 0;
+}
+
+.fortune-char-box {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 8px;
+}
+
+.fortune-char-box .char-large {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.fortune-char-box .char-small {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    font-size: 9px;
+    font-weight: 500;
+    opacity: 0.7;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.fortune-stage {
+    font-size: 11px;
+    color: #86868b;
+    font-weight: 400;
+    line-height: 1.4;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.element-count {
+    font-size: 13px;
+    color: #1d1d1f;
+    font-weight: 600;
+    margin: 4px 0;
+    text-align: center;
+}
+
+/* Legacy fortune-box for backward compatibility */
 .fortune-box {
     min-width: 90px;
-    background: #f9fafb;
-    border: 1px solid #e5e8eb;
-    border-radius: 10px;
+    background: #f5f5f7;
+    border-radius: 12px;
     padding: 14px 10px;
     text-align: center;
     flex-shrink: 0;
 }
 
 .fortune-box.current {
-    background: #eff6ff;
-    border: 2px solid #3182f6;
+    background: #e8f4ff;
+    border: 1px solid #007aff;
 }
 
 .fortune-box div {
     margin: 4px 0;
     font-size: 12px;
-    color: #4e5968;
-    font-weight: 600;
+    color: #1d1d1f;
+    font-weight: 500;
 }
 
 .fortune-box div:first-child {
-    font-weight: 700;
-    color: #191f28;
+    font-weight: 600;
+    color: #1d1d1f;
 }
 
 .fortune-box .pillar-char {
@@ -358,33 +597,47 @@ header .subtitle {
 .back-btn {
     width: 100%;
     padding: 14px;
-    background: #f2f4f6;
-    color: #4e5968;
+    background: #f5f5f7;
+    color: #1d1d1f;
     border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 700;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 500;
     cursor: pointer;
     margin-top: 20px;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
+    font-family: inherit;
 }
 
 .back-btn:hover {
-    background: #e5e8eb;
+    background: #e8e8ed;
+}
+
+.back-btn:active {
+    background: #d2d2d7;
+    transform: scale(0.98);
 }
 
 /* Responsive - Mobile First */
 @media (max-width: 768px) {
-    body {
-        padding: 20px 16px;
-    }
-    
     .container {
         max-width: 100%;
     }
     
+    header {
+        padding: 16px 20px;
+    }
+    
     header h1 {
-        font-size: 36px;
+        font-size: 20px;
+    }
+    
+    .form-container {
+        padding: 24px 20px;
+    }
+    
+    .input-group {
+        margin-bottom: 28px;
     }
     
     .pillars-container {
@@ -409,35 +662,34 @@ header .subtitle {
     .fortune-box {
         min-width: 80px;
     }
-}
-
-/* Checkbox Style */
-input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-label {
-    cursor: pointer;
+    
+    .date-time-row {
+        flex-wrap: wrap;
+    }
+    
+    .calendar-select {
+        flex: 1 1 100%;
+    }
+    
+    .date-input {
+        flex: 1 1 calc(50% - 4px);
+    }
+    
+    .time-input {
+        flex: 1 1 calc(50% - 4px);
+    }
 }
 
 /* Focus States */
 input:focus,
+select:focus,
 button:focus {
-    outline: 2px solid #3182f6;
-    outline-offset: 2px;
-}
-
-button:focus {
-    outline-offset: -2px;
+    outline: none;
 }
 
 /* Smooth Transitions */
 * {
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 /* Typography */
