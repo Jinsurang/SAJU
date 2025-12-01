@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saju - Four Pillars Reading</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>四柱八字</h1>
+            <p class="subtitle">Saju - Korean Four Pillars Fortune Reading</p>
+        </header>
+
+        <!-- Input Form -->
+        <div class="form-container" id="formContainer">
+            <form id="sajuForm" onsubmit="return submitForm(event)">
+                <div class="input-group">
+                    <label>Name</label>
+                    <input type="text" id="nameInput" placeholder="Your name" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Birth Date</label>
+                    <div class="date-inputs">
+                        <input type="number" id="yearInput" placeholder="1990" min="1900" max="2100" required>
+                        <input type="number" id="monthInput" placeholder="1" min="1" max="12" required>
+                        <input type="number" id="dayInput" placeholder="15" min="1" max="31" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Sex at Birth</label>
+                    <div class="btn-group">
+                        <button type="button" id="maleBtn" class="btn-option" onclick="selectGender('male')">Male</button>
+                        <button type="button" id="femaleBtn" class="btn-option" onclick="selectGender('female')">Female</button>
+                    </div>
+                    <input type="hidden" id="genderInput" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Calendar Type</label>
+                    <div class="btn-group">
+                        <button type="button" id="solarBtn" class="btn-option active" onclick="selectCalendar('solar')">☀️ Solar</button>
+                        <button type="button" id="lunarBtn" class="btn-option" onclick="selectCalendar('lunar')">🌙 Lunar</button>
+                    </div>
+                    <input type="hidden" id="calendarInput" value="solar">
+                </div>
+
+                <div class="input-group">
+                    <label>Birth Time (Optional)</label>
+                    <input type="time" id="timeInput">
+                    <label style="font-size:14px;margin-top:8px;">
+                        <input type="checkbox" id="unknownTime" onchange="toggleTime()"> I don't know my birth time
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">Calculate Saju</button>
+            </form>
+        </div>
+
+        <!-- Result Display -->
+        <div class="result-container" id="resultContainer" style="display:none;">
+            <div class="result-header">
+                <h2 id="resultName"></h2>
+                <p id="resultInfo"></p>
+            </div>
+
+            <div class="pillars-container">
+                <div class="pillar">
+                    <div class="pillar-label">Hour 時柱</div>
+                    <div class="ten-god" id="hourGod"></div>
+                    <div class="pillar-char" id="hourH"></div>
+                    <div class="pillar-char" id="hourE"></div>
+                    <div class="pillar-stage" id="hourStage"></div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-label">Day 日柱</div>
+                    <div class="ten-god" id="dayGod">Self</div>
+                    <div class="pillar-char" id="dayH"></div>
+                    <div class="pillar-char" id="dayE"></div>
+                    <div class="pillar-stage" id="dayStage"></div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-label">Month 月柱</div>
+                    <div class="ten-god" id="monthGod"></div>
+                    <div class="pillar-char" id="monthH"></div>
+                    <div class="pillar-char" id="monthE"></div>
+                    <div class="pillar-stage" id="monthStage"></div>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-label">Year 年柱</div>
+                    <div class="ten-god" id="yearGod"></div>
+                    <div class="pillar-char" id="yearH"></div>
+                    <div class="pillar-char" id="yearE"></div>
+                    <div class="pillar-stage" id="yearStage"></div>
+                </div>
+            </div>
+
+            <div class="elements-section">
+                <h3>Five Elements Balance 五行</h3>
+                <div class="elements-grid">
+                    <div class="element-item">
+                        <div class="element-icon Wood">木</div>
+                        <div>Wood</div>
+                        <div id="woodCount">0</div>
+                        <div id="woodPercent">0%</div>
+                    </div>
+                    <div class="element-item">
+                        <div class="element-icon Fire">火</div>
+                        <div>Fire</div>
+                        <div id="fireCount">0</div>
+                        <div id="firePercent">0%</div>
+                    </div>
+                    <div class="element-item">
+                        <div class="element-icon Earth">土</div>
+                        <div>Earth</div>
+                        <div id="earthCount">0</div>
+                        <div id="earthPercent">0%</div>
+                    </div>
+                    <div class="element-item">
+                        <div class="element-icon Metal">金</div>
+                        <div>Metal</div>
+                        <div id="metalCount">0</div>
+                        <div id="metalPercent">0%</div>
+                    </div>
+                    <div class="element-item">
+                        <div class="element-icon Water">水</div>
+                        <div>Water</div>
+                        <div id="waterCount">0</div>
+                        <div id="waterPercent">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fortune-section">
+                <h3>Major Life Cycles 大運</h3>
+                <div class="fortune-grid" id="daeunGrid"></div>
+            </div>
+
+            <div class="fortune-section">
+                <h3>Annual Fortunes 歲運</h3>
+                <div class="fortune-grid" id="seunGrid"></div>
+            </div>
+
+            <div class="fortune-section">
+                <h3>Monthly Fortunes 月運</h3>
+                <div class="fortune-grid" id="wolunGrid"></div>
+            </div>
+
+            <button class="back-btn" onclick="goBack()">Calculate Another</button>
+        </div>
+    </div>
+
+    <script src="lunar.js"></script>
+    <script src="saju.js"></script>
+    <script>
+        // Gender Selection
+        function selectGender(gender) {
+            document.getElementById('genderInput').value = gender;
+            document.getElementById('maleBtn').classList.remove('active');
+            document.getElementById('femaleBtn').classList.remove('active');
+            if (gender === 'male') {
+                document.getElementById('maleBtn').classList.add('active');
+            } else {
+                document.getElementById('femaleBtn').classList.add('active');
+            }
+        }
+
+        // Calendar Selection
+        function selectCalendar(type) {
+            document.getElementById('calendarInput').value = type;
+            document.getElementById('solarBtn').classList.remove('active');
+            document.getElementById('lunarBtn').classList.remove('active');
+            if (type === 'solar') {
+                document.getElementById('solarBtn').classList.add('active');
+            } else {
+                document.getElementById('lunarBtn').classList.add('active');
+            }
+        }
+
+        // Toggle Time Input
+        function toggleTime() {
+            var checkbox = document.getElementById('unknownTime');
+            var timeInput = document.getElementById('timeInput');
+            if (checkbox.checked) {
+                timeInput.disabled = true;
+                timeInput.value = '';
+            } else {
+                timeInput.disabled = false;
+            }
+        }
+
+        // Form Submission
+        function submitForm(event) {
+            event.preventDefault();
+            
+            var name = document.getElementById('nameInput').value;
+            var year = parseInt(document.getElementById('yearInput').value);
+            var month = parseInt(document.getElementById('monthInput').value);
+            var day = parseInt(document.getElementById('dayInput').value);
+            var gender = document.getElementById('genderInput').value;
+            var calendar = document.getElementById('calendarInput').value;
+            var timeValue = document.getElementById('timeInput').value;
+            var unknownTime = document.getElementById('unknownTime').checked;
+            
+            if (!gender) {
+                alert('Please select your sex at birth');
+                return false;
+            }
+            
+            var hour = 0;
+            var minute = 0;
+            if (!unknownTime && timeValue) {
+                var parts = timeValue.split(':');
+                hour = parseInt(parts[0]);
+                minute = parseInt(parts[1]);
+            }
+            
+            try {
+                var birthData = {
+                    year: year,
+                    month: month,
+                    day: day,
+                    hour: hour,
+                    minute: minute,
+                    gender: gender,
+                    calendarType: calendar,
+                    isUnknownTime: unknownTime
+                };
+                
+                var saju = calculateSaju(birthData);
+                var elements = countElements(saju);
+                
+                showResults(name, birthData, saju, elements);
+            } catch (err) {
+                alert('Error: ' + err.message);
+                console.error(err);
+            }
+            
+            return false;
+        }
+
+        // Display Results
+        function showResults(name, birthData, saju, elements) {
+            document.getElementById('resultName').textContent = name + ' (' + saju.dayAnimal + ')';
+            document.getElementById('resultInfo').textContent = 
+                birthData.year + '.' + birthData.month + '.' + birthData.day;
+            
+            // Display Pillars
+            setPillar('year', saju.year, saju.tenGods.year);
+            setPillar('month', saju.month, saju.tenGods.month);
+            setPillar('day', saju.day, null);
+            setPillar('hour', saju.hour, saju.tenGods.hour);
+            
+            // Display Elements
+            var total = elements.Wood + elements.Fire + elements.Earth + elements.Metal + elements.Water;
+            document.getElementById('woodCount').textContent = elements.Wood;
+            document.getElementById('fireCount').textContent = elements.Fire;
+            document.getElementById('earthCount').textContent = elements.Earth;
+            document.getElementById('metalCount').textContent = elements.Metal;
+            document.getElementById('waterCount').textContent = elements.Water;
+            
+            document.getElementById('woodPercent').textContent = total > 0 ? (elements.Wood/total*100).toFixed(1) + '%' : '0%';
+            document.getElementById('firePercent').textContent = total > 0 ? (elements.Fire/total*100).toFixed(1) + '%' : '0%';
+            document.getElementById('earthPercent').textContent = total > 0 ? (elements.Earth/total*100).toFixed(1) + '%' : '0%';
+            document.getElementById('metalPercent').textContent = total > 0 ? (elements.Metal/total*100).toFixed(1) + '%' : '0%';
+            document.getElementById('waterPercent').textContent = total > 0 ? (elements.Water/total*100).toFixed(1) + '%' : '0%';
+            
+            // Display Fortunes
+            setDaeun(saju.daeun, saju.day.heavenly);
+            setSeun(saju.seun);
+            setWolun(saju.wolun);
+            
+            // Switch View
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        // Set Pillar
+        function setPillar(pos, pillar, tenGod) {
+            var hEl = document.getElementById(pos + 'H');
+            var eEl = document.getElementById(pos + 'E');
+            var godEl = document.getElementById(pos + 'God');
+            var stageEl = document.getElementById(pos + 'Stage');
+            
+            if (!pillar) {
+                hEl.textContent = '?';
+                eEl.textContent = '?';
+                hEl.className = 'pillar-char';
+                eEl.className = 'pillar-char';
+                hEl.style.background = '#ccc';
+                eEl.style.background = '#ccc';
+                godEl.textContent = '';
+                stageEl.textContent = 'Unknown';
+                return;
+            }
+            
+            hEl.textContent = pillar.heavenly.ko;
+            eEl.textContent = pillar.earthly.ko;
+            hEl.className = 'pillar-char ' + pillar.heavenly.element;
+            eEl.className = 'pillar-char ' + pillar.earthly.element;
+            
+            if (tenGod) {
+                godEl.textContent = tenGod.en;
+            }
+            
+            if (pillar.stage) {
+                stageEl.textContent = pillar.stage.en;
+            }
+        }
+
+        // Set Daeun
+        function setDaeun(daeun, dayStem) {
+            var grid = document.getElementById('daeunGrid');
+            grid.innerHTML = '';
+            for (var i = 0; i < daeun.length; i++) {
+                var d = daeun[i];
+                var box = document.createElement('div');
+                box.className = 'fortune-box';
+                box.innerHTML = 
+                    '<div><strong>' + d.age + '</strong></div>' +
+                    '<div style="font-size:10px;color:#667eea;">' + d.startAge + '-' + (d.startAge+9) + '</div>' +
+                    '<div class="pillar-char ' + d.heavenly.element + '" style="font-size:24px;margin:8px 0;">' + d.heavenly.ko + '</div>' +
+                    '<div class="pillar-char ' + d.earthly.element + '" style="font-size:24px;margin:8px 0;">' + d.earthly.ko + '</div>' +
+                    '<div style="font-size:10px;color:#888;">' + d.stage.en + '</div>';
+                grid.appendChild(box);
+            }
+        }
+
+        // Set Seun
+        function setSeun(seun) {
+            var grid = document.getElementById('seunGrid');
+            grid.innerHTML = '';
+            var currentYear = new Date().getFullYear();
+            for (var i = 0; i < seun.length; i++) {
+                var s = seun[i];
+                var box = document.createElement('div');
+                box.className = s.year === currentYear ? 'fortune-box current' : 'fortune-box';
+                box.innerHTML = 
+                    '<div><strong>' + s.year + '</strong></div>' +
+                    '<div class="pillar-char ' + s.heavenly.element + '" style="font-size:24px;margin:8px 0;">' + s.heavenly.ko + '</div>' +
+                    '<div class="pillar-char ' + s.earthly.element + '" style="font-size:24px;margin:8px 0;">' + s.earthly.ko + '</div>' +
+                    '<div style="font-size:10px;color:#888;">' + s.stage.en + '</div>';
+                grid.appendChild(box);
+            }
+        }
+
+        // Set Wolun
+        function setWolun(wolun) {
+            var grid = document.getElementById('wolunGrid');
+            grid.innerHTML = '';
+            var currentMonth = new Date().getMonth() + 1;
+            for (var i = 0; i < wolun.length; i++) {
+                var w = wolun[i];
+                var box = document.createElement('div');
+                box.className = w.month === currentMonth ? 'fortune-box current' : 'fortune-box';
+                box.innerHTML = 
+                    '<div><strong>' + w.monthName + '</strong></div>' +
+                    '<div class="pillar-char ' + w.heavenly.element + '" style="font-size:24px;margin:8px 0;">' + w.heavenly.ko + '</div>' +
+                    '<div class="pillar-char ' + w.earthly.element + '" style="font-size:24px;margin:8px 0;">' + w.earthly.ko + '</div>' +
+                    '<div style="font-size:10px;color:#888;">' + w.stage.en + '</div>';
+                grid.appendChild(box);
+            }
+        }
+
+        // Go Back
+        function goBack() {
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
